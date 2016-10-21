@@ -1,10 +1,10 @@
 <?php
-include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php");
+include_once("./Services/Repository/classes/class.ilCronHookPlugin.php");
 
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
+class il<PLUGINNAME>Plugin.php extends ilCronHookPlugin {
 	/**
 	 * Get the name of the Plugin
 	 *
@@ -15,8 +15,18 @@ class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
 	}
 
 	/**
-	 * Defines custom uninstall action like delete table or something else
+	 * Get an array with 1 to n numbers of cronjob objects
+	 *
+	 * @return il<PLUGINNAME>Job[]
 	 */
-	protected function uninstallCustom() {
+	public function getCronJobInstances() {
+	}
+
+	/**
+	 * Get a single cronjob object
+	 *
+	 * @return il<PLUGINNAME>Job
+	 */
+	public function getCronJobInstance() {
 	}
 }
