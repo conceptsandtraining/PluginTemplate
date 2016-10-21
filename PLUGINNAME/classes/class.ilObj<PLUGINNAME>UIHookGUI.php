@@ -1,60 +1,30 @@
 <?php
-include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
+include_once("./Services/Repository/classes/class.ilUIHookPluginGUI.php");
 
 /**
- * Plugin object GUI class. Baseclass for all GUI action in ILIAS
+ * Plugin object GUI class. Manipulates the output at every page call
  */
-class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI {
+class ilObj<PLUGINNAME>UIHookGUI  extends ilUIHookPluginGUI {
 	/**
-	 * Called after parent constructor. It's possible to define some plugin special values
+	 * Called bevore html output get started
+	 * Manipulate the html output string
+	 *
+	 * @inheritdoc
 	 */
-	protected function afterConstructor() {
-		global $tpl, $ilCtrl, $ilTabs, $ilUser, $ilToolbar, $ilAccess, $ilDB;
+	function getHTML($a_comp, $a_part, $a_par = array()) {
 
-		/**
-		 * @var $tpl       ilTemplate
-		 * @var $ilCtrl    ilCtrl
-		 * @var $ilTabs    ilTabsGUI
-		 * @var $ilUser    ilObjUser
-		 * @var $ilToolbar ilToolbarGUI
-		 */
-		$this->gTpl = $tpl;
-		$this->gCtrl = $ilCtrl;
-		$this->gTabs = $ilTabs;
-		$this->gUsr = $ilUser;
-		$this->gToolbar = $ilToolbar;
-		$this->gAccess = $ilAccess;
-		$this->plugin = $this->object->plugin;
+		return array
+			( "mode" => ilUIHookPluginGUI::APPEND
+			, "html" => $html
+			);
 
 	}
 
 	/**
-	* Get type.  Same value as choosen in plugin.php
-	*/
-	final function getType() {
-		return "";
-	}
-
-	/**
-	* Handles all commmands of this class, centralizes permission checks
-	*/
-	function performCommand($cmd) {
-		switch ($cmd) {
-			default:
-		}
-	}
-
-	/**
-	* After object has been created -> jump to this command
-	*/
-	function getAfterCreationCmd() {
-		return "";
-	}
-
-	/**
-	* Get standard command
-	*/
-	function getStandardCmd() {
-		return "";
+	 * Modify a GUI in ILIAS. Only usable for tabs or subtabs.
+	 *
+	 * @inheritdoc
+	 */
+	function modifyGUI($a_comp, $a_part, $a_par = array()) {
 	}
 }

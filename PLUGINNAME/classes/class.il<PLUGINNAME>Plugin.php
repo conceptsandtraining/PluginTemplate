@@ -1,10 +1,10 @@
 <?php
-include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php");
+include_once("./Services/Repository/classes/class.ilUserInterfaceHookPlugin.php");
 
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
+class il<PLUGINNAME>Plugin.php extends ilUserInterfaceHookPlugin {
 	/**
 	 * Get the name of the Plugin
 	 *
@@ -12,11 +12,5 @@ class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
 	 */
 	function getPluginName() {
 		return "<PLUGINNAME>";
-	}
-
-	/**
-	 * Defines custom uninstall action like delete table or something else
-	 */
-	protected function uninstallCustom() {
 	}
 }
