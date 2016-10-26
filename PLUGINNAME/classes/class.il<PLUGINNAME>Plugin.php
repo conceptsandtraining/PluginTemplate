@@ -1,22 +1,16 @@
 <?php
-include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php");
+require_once("./Services/EventHandling/classes/class.ilEventHookPlugin.php");
 
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
+class il<PLUGINNAME>Plugin.php extends ilEventHookPlugin {
 	/**
-	 * Get the name of the Plugin
+	 * Perform command if the event is thrown
 	 *
-	 * @return string
+	 * @inheritdoc
 	 */
-	function getPluginName() {
-		return "<PLUGINNAME>";
-	}
+	function handleEvent($a_component, $a_event, $a_parameter) {
 
-	/**
-	 * Defines custom uninstall action like delete table or something else
-	 */
-	protected function uninstallCustom() {
 	}
 }
