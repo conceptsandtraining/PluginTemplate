@@ -1,7 +1,2 @@
-# PluginTemplate
-**This is a collection of templates to create plugins for ILIAS
-
-### Available templates
-```
-* RepositoryObjects
-```
+# Advanced Meta Data
+**This is a template for an ILIAS plugin handles advanced meta data
