@@ -1,5 +1,5 @@
-# Advanced Meta Data
-**This is a template for an ILIAS plugin handles advanced meta data**
+# Repository
+**This is a template for an ILIAS plugin for repository objects**
 
 # Guide
 ```
