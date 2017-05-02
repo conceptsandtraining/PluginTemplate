@@ -1,6 +1,8 @@
 <?php
 // alphanumerical ID of the plugin; never change this
 // up to 4 letters
+// Also set this type in classes/ilObj<PLUGINNAME>.php in initType.
+// and in classes/ilObj<PLUGINNAME>GUI.php in getType.
 $id = "";
 
 // code version; must be changed for all code changes
