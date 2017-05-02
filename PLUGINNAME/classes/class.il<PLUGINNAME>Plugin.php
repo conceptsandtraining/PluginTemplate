@@ -4,7 +4,7 @@ include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php")
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilRepositoryObjectPlugin {
+class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	/**
 	 * Get the name of the Plugin
 	 *
