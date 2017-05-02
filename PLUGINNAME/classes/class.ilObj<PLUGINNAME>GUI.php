@@ -3,6 +3,9 @@ include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
 
 /**
  * Plugin object GUI class. Baseclass for all GUI action in ILIAS
+ *
+ * @ilCtrl_isCalledBy ilObj<PLUGINNAME>GUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
+ * @ilCtrl_Calls ilObj<PLUGINNAME>GUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI
  */
 class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI {
 	/**
