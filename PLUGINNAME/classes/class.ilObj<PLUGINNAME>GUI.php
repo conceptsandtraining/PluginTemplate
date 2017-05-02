@@ -12,23 +12,6 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI {
 	 * Called after parent constructor. It's possible to define some plugin special values
 	 */
 	protected function afterConstructor() {
-		global $tpl, $ilCtrl, $ilTabs, $ilUser, $ilToolbar, $ilAccess, $ilDB;
-
-		/**
-		 * @var $tpl       ilTemplate
-		 * @var $ilCtrl    ilCtrl
-		 * @var $ilTabs    ilTabsGUI
-		 * @var $ilUser    ilObjUser
-		 * @var $ilToolbar ilToolbarGUI
-		 */
-		$this->gTpl = $tpl;
-		$this->gCtrl = $ilCtrl;
-		$this->gTabs = $ilTabs;
-		$this->gUsr = $ilUser;
-		$this->gToolbar = $ilToolbar;
-		$this->gAccess = $ilAccess;
-		$this->plugin = $this->object->plugin;
-
 	}
 
 	/**
