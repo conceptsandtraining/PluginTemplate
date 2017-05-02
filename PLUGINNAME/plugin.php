@@ -3,6 +3,7 @@
 // up to 4 letters
 // Also set this type in classes/ilObj<PLUGINNAME>.php in initType.
 // and in classes/ilObj<PLUGINNAME>GUI.php in getType.
+// and in classes/ilObj<PLUGINNAME>ListGUI.php in getType.
 $id = "";
 
 // code version; must be changed for all code changes
