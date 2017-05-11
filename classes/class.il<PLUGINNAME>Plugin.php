@@ -25,53 +25,121 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 		parent::beforeActivation();
 		global $DIC;
 		$db = $DIC->database();
-		// before activating, we ensure, that the type exists in the ILIAS
-		// object database and that all permissions exist
+
 		$type = $this->getId();
 
-		if (substr($type, 0, 1) != "x") {
+		if (!$this->isRepositoryPlugin($type)) {
 			throw new ilPluginException("Object plugin type must start with an x. Current type is ".$type.".");
 		}
 
-		// check whether type exists in object data, if not, create the type
-		$set = $db->query("SELECT * FROM object_data ".
-			" WHERE type = ".$db->quote("typ", "text").
-			" AND title = ".$db->quote($type, "text"));
-		if ($rec = $db->fetchAssoc($set)) {
-			$t_id = $rec["obj_id"];
-		} else {
-			$t_id = $db->nextId("object_data");
-			$db->manipulate("INSERT INTO object_data ".
-				"(obj_id, type, title, description, owner, create_date, last_update) VALUES (".
-				$db->quote($t_id, "integer").",".
-				$db->quote("typ", "text").",".
-				$db->quote($type, "text").",".
-				$db->quote("Plugin ".$this->getPluginName(), "text").",".
-				$db->quote(-1, "integer").",".
-				$db->quote(ilUtil::now(), "timestamp").",".
-				$db->quote(ilUtil::now(), "timestamp").
-				")");
+		$type_id = $this->getTypeId($type, $db);
+		if(!$type_id) {
+			$type_id = $this->createTypeId($type, $db);
 		}
 
-		// add rbac operations for plugin
-		// 58: copy
+		$this->assignCopyPermissionToPlugin($type_id, $db);
+
+		return true;
+	}
+
+	/**
+	 * Check current plugin is repository plgind
+	 *
+	 * @param string 	$type
+	 *
+	 * @return bool
+	 */
+	protected function isRepositoryPlugin($type) {
+		return substr($type, 0, 1) == "x");
+	}
+
+	/**
+	 * Get id of current type
+	 *
+	 * @param string 	$type
+	 * @param 			$db
+	 *
+	 * @return int | null
+	 */
+	protected function getTypeId($type, $db) {
+		$set = $db->query("SELECT obj_id FROM object_data ".
+			" WHERE type = ".$db->quote("typ", "text").
+			" AND title = ".$db->quote($type, "text"));
+
+		if($db->numRows($set) == 0) {
+			return null;
+		}
+
+		$rec = $db->fetchAssoc($set);
+		return $rec["obj_id"];
+	}
+
+	/**
+	 * Create a new entry in object data
+	 *
+	 * @param string 	$type
+	 * @param 			$db
+	 *
+	 * @return int
+	 */
+	protected function createTypeId($type, $db) {
+		$type_id = $db->nextId("object_data");
+		$db->manipulate("INSERT INTO object_data ".
+			"(obj_id, type, title, description, owner, create_date, last_update) VALUES (".
+			$db->quote($type_id, "integer").",".
+			$db->quote("typ", "text").",".
+			$db->quote($type, "text").",".
+			$db->quote("Plugin ".$this->getPluginName(), "text").",".
+			$db->quote(-1, "integer").",".
+			$db->quote(ilUtil::now(), "timestamp").",".
+			$db->quote(ilUtil::now(), "timestamp").
+			")");
+
+		return $type_id;
+	}
+
+	/**
+	 * Assign permission copy to current plugin
+	 * Operation id 58: copy
+	 *
+	 * @param int 		$type_id
+	 * @param 			$db
+	 *
+	 * @return int
+	 */
+	protected function assignCopyPermissionToPlugin($type_id, $db) {
 		$ops = array(58);
 
 		foreach ($ops as $op) {
 			// check whether type exists in object data, if not, create the type
-			$set = $db->query("SELECT * FROM rbac_ta ".
-				" WHERE typ_id = ".$db->quote($t_id, "integer").
-				" AND ops_id = ".$db->quote($op, "integer"));
-			if (!$db->fetchAssoc($set)) {
+			
+			if (!$this->permissionIsAssigned($type_id, $op, $db)) {
 				$db->manipulate("INSERT INTO rbac_ta ".
 					"(typ_id, ops_id) VALUES (".
-					$db->quote($t_id, "integer").",".
+					$db->quote($type_id, "integer").",".
 					$db->quote($op, "integer").
 					")");
 			}
 		}
+	}
 
-		return true;
+	/**
+	 * Checks permission is not assigned to plugin
+	 *
+	 * @param int 		$type_id
+	 * @param int 		$op_id
+	 * @param 			$db
+	 *
+	 * @return bool
+	 */
+	protected function permissionIsAssigned($type_id, $op_id, $db) {
+		$set = $db->query("SELECT count(typ_id) as cnt FROM rbac_ta ".
+				" WHERE typ_id = ".$db->quote($type_id, "integer").
+				" AND ops_id = ".$db->quote($op_id, "integer"));
+
+		$rec = $db->fetchAssoc($set);
+
+		return $rec["cnt"] > 0;
 	}
 
 	/**
