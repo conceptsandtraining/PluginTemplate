@@ -1,7 +1,11 @@
-# PluginTemplate
-**This is a collection of templates to create plugins for ILIAS
+# Cron
+**This is a template for an ILIAS plugin handles cron jobs**
 
-### Available templates
+# Guide
 ```
-* RepositoryObjects
+* Rename the plugin folder to youre pluginname
+* Rename all files. (Replace <PLUGINNAME> with pluginname)
+* Rename all classnames. (Replace <PLUGINNAME> with pluginname)
+* Set plugin type in files
+* Update composer
 ```
