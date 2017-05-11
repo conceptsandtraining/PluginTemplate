@@ -31,38 +31,42 @@ class Generic_Sniffs_Formatting_NoSpaceAfterCastSniff implements PHP_CodeSniffer
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return PHP_CodeSniffer_Tokens::$castTokens;
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return PHP_CodeSniffer_Tokens::$castTokens;
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in
-	 *                                        the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in
+     *                                        the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
-			return;
-		}
+        if ($tokens[($stackPtr + 1)]['code'] !== T_WHITESPACE) {
+            return;
+        }
 
-		$error = 'A cast statement must not be followed by a space';
-		$fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceFound');
-		if ($fix === true) {
-			$phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
-		}
-	}//end process()
+        $error = 'A cast statement must not be followed by a space';
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'SpaceFound');
+        if ($fix === true) {
+            $phpcsFile->fixer->replaceToken(($stackPtr + 1), '');
+        }
+
+    }//end process()
+
+
 }//end class

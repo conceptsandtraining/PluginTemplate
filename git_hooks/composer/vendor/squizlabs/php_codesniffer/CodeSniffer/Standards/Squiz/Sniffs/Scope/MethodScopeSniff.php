@@ -14,7 +14,7 @@
  */
 
 if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false) {
-	throw new PHP_CodeSniffer_Exception('Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found');
+    throw new PHP_CodeSniffer_Exception('Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found');
 }
 
 /**
@@ -33,53 +33,57 @@ class Squiz_Sniffs_Scope_MethodScopeSniff extends PHP_CodeSniffer_Standards_Abst
 {
 
 
-	/**
-	 * Constructs a Squiz_Sniffs_Scope_MethodScopeSniff.
-	 */
-	public function __construct()
-	{
-		parent::__construct(array(T_CLASS, T_INTERFACE, T_TRAIT), array(T_FUNCTION));
-	}//end __construct()
+    /**
+     * Constructs a Squiz_Sniffs_Scope_MethodScopeSniff.
+     */
+    public function __construct()
+    {
+        parent::__construct(array(T_CLASS, T_INTERFACE, T_TRAIT), array(T_FUNCTION));
+
+    }//end __construct()
 
 
-	/**
-	 * Processes the function tokens within the class.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file where this token was found.
-	 * @param int                  $stackPtr  The position where the token was found.
-	 * @param int                  $currScope The current scope opener token.
-	 *
-	 * @return void
-	 */
-	protected function processTokenWithinScope(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes the function tokens within the class.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file where this token was found.
+     * @param int                  $stackPtr  The position where the token was found.
+     * @param int                  $currScope The current scope opener token.
+     *
+     * @return void
+     */
+    protected function processTokenWithinScope(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		$methodName = $phpcsFile->getDeclarationName($stackPtr);
-		if ($methodName === null) {
-			// Ignore closures.
-			return;
-		}
+        $methodName = $phpcsFile->getDeclarationName($stackPtr);
+        if ($methodName === null) {
+            // Ignore closures.
+            return;
+        }
 
-		if ($phpcsFile->hasCondition($stackPtr, T_FUNCTION) === true) {
-			// Ignore nested functions.
-			return;
-		}
+        if ($phpcsFile->hasCondition($stackPtr, T_FUNCTION) === true) {
+            // Ignore nested functions.
+            return;
+        }
 
-		$modifier = null;
-		for ($i = ($stackPtr - 1); $i > 0; $i--) {
-			if ($tokens[$i]['line'] < $tokens[$stackPtr]['line']) {
-				break;
-			} elseif (isset(PHP_CodeSniffer_Tokens::$scopeModifiers[$tokens[$i]['code']]) === true) {
-				$modifier = $i;
-				break;
-			}
-		}
+        $modifier = null;
+        for ($i = ($stackPtr - 1); $i > 0; $i--) {
+            if ($tokens[$i]['line'] < $tokens[$stackPtr]['line']) {
+                break;
+            } else if (isset(PHP_CodeSniffer_Tokens::$scopeModifiers[$tokens[$i]['code']]) === true) {
+                $modifier = $i;
+                break;
+            }
+        }
 
-		if ($modifier === null) {
-			$error = 'Visibility must be declared on method "%s"';
-			$data  = array($methodName);
-			$phpcsFile->addError($error, $stackPtr, 'Missing', $data);
-		}
-	}//end processTokenWithinScope()
+        if ($modifier === null) {
+            $error = 'Visibility must be declared on method "%s"';
+            $data  = array($methodName);
+            $phpcsFile->addError($error, $stackPtr, 'Missing', $data);
+        }
+
+    }//end processTokenWithinScope()
+
+
 }//end class

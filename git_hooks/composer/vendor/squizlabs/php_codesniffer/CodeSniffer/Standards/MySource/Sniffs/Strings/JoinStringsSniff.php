@@ -26,57 +26,61 @@
 class MySource_Sniffs_Strings_JoinStringsSniff implements PHP_CodeSniffer_Sniff
 {
 
-	/**
-	 * A list of tokenizers this sniff supports.
-	 *
-	 * @var array
-	 */
-	public $supportedTokenizers = array('JS');
+    /**
+     * A list of tokenizers this sniff supports.
+     *
+     * @var array
+     */
+    public $supportedTokenizers = array('JS');
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_STRING);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_STRING);
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param integer              $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param integer              $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		if ($tokens[$stackPtr]['content'] !== 'join') {
-			return;
-		}
+        if ($tokens[$stackPtr]['content'] !== 'join') {
+            return;
+        }
 
-		$prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
-		if ($tokens[$prev]['code'] !== T_OBJECT_OPERATOR) {
-			return;
-		}
+        $prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
+        if ($tokens[$prev]['code'] !== T_OBJECT_OPERATOR) {
+            return;
+        }
 
-		$prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($prev - 1), null, true);
-		if ($tokens[$prev]['code'] === T_CLOSE_SQUARE_BRACKET) {
-			$opener = $tokens[$prev]['bracket_opener'];
-			if ($tokens[($opener - 1)]['code'] !== T_STRING) {
-				// This means the array is declared inline, like x = [a,b,c].join()
-				// and not elsewhere, like x = y[a].join()
-				// The first is not allowed while the second is.
-				$error = 'Joining strings using inline arrays is not allowed; use the + operator instead';
-				$phpcsFile->addError($error, $stackPtr, 'ArrayNotAllowed');
-			}
-		}
-	}//end process()
+        $prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($prev - 1), null, true);
+        if ($tokens[$prev]['code'] === T_CLOSE_SQUARE_BRACKET) {
+            $opener = $tokens[$prev]['bracket_opener'];
+            if ($tokens[($opener - 1)]['code'] !== T_STRING) {
+                // This means the array is declared inline, like x = [a,b,c].join()
+                // and not elsewhere, like x = y[a].join()
+                // The first is not allowed while the second is.
+                $error = 'Joining strings using inline arrays is not allowed; use the + operator instead';
+                $phpcsFile->addError($error, $stackPtr, 'ArrayNotAllowed');
+            }
+        }
+
+    }//end process()
+
+
 }//end class

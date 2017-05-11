@@ -32,92 +32,96 @@
 class Generic_Sniffs_Metrics_CyclomaticComplexitySniff implements PHP_CodeSniffer_Sniff
 {
 
-	/**
-	 * A complexity higher than this value will throw a warning.
-	 *
-	 * @var int
-	 */
-	public $complexity = 10;
+    /**
+     * A complexity higher than this value will throw a warning.
+     *
+     * @var int
+     */
+    public $complexity = 10;
 
-	/**
-	 * A complexity higer than this value will throw an error.
-	 *
-	 * @var int
-	 */
-	public $absoluteComplexity = 20;
-
-
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_FUNCTION);
-	}//end register()
+    /**
+     * A complexity higher than this value will throw an error.
+     *
+     * @var int
+     */
+    public $absoluteComplexity = 20;
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$this->currentFile = $phpcsFile;
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_FUNCTION);
 
-		$tokens = $phpcsFile->getTokens();
+    }//end register()
 
-		// Ignore abstract methods.
-		if (isset($tokens[$stackPtr]['scope_opener']) === false) {
-			return;
-		}
 
-		// Detect start and end of this function definition.
-		$start = $tokens[$stackPtr]['scope_opener'];
-		$end   = $tokens[$stackPtr]['scope_closer'];
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $this->currentFile = $phpcsFile;
 
-		// Predicate nodes for PHP.
-		$find = array(
-				 T_CASE    => true,
-				 T_DEFAULT => true,
-				 T_CATCH   => true,
-				 T_IF      => true,
-				 T_FOR     => true,
-				 T_FOREACH => true,
-				 T_WHILE   => true,
-				 T_DO      => true,
-				 T_ELSEIF  => true,
-				);
+        $tokens = $phpcsFile->getTokens();
 
-		$complexity = 1;
+        // Ignore abstract methods.
+        if (isset($tokens[$stackPtr]['scope_opener']) === false) {
+            return;
+        }
 
-		// Iterate from start to end and count predicate nodes.
-		for ($i = ($start + 1); $i < $end; $i++) {
-			if (isset($find[$tokens[$i]['code']]) === true) {
-				$complexity++;
-			}
-		}
+        // Detect start and end of this function definition.
+        $start = $tokens[$stackPtr]['scope_opener'];
+        $end   = $tokens[$stackPtr]['scope_closer'];
 
-		if ($complexity > $this->absoluteComplexity) {
-			$error = 'Function\'s cyclomatic complexity (%s) exceeds allowed maximum of %s';
-			$data  = array(
-					  $complexity,
-					  $this->absoluteComplexity,
-					 );
-			$phpcsFile->addError($error, $stackPtr, 'MaxExceeded', $data);
-		} elseif ($complexity > $this->complexity) {
-			$warning = 'Function\'s cyclomatic complexity (%s) exceeds %s; consider refactoring the function';
-			$data    = array(
-						$complexity,
-						$this->complexity,
-					   );
-			$phpcsFile->addWarning($warning, $stackPtr, 'TooHigh', $data);
-		}
-	}//end process()
+        // Predicate nodes for PHP.
+        $find = array(
+                 T_CASE    => true,
+                 T_DEFAULT => true,
+                 T_CATCH   => true,
+                 T_IF      => true,
+                 T_FOR     => true,
+                 T_FOREACH => true,
+                 T_WHILE   => true,
+                 T_DO      => true,
+                 T_ELSEIF  => true,
+                );
+
+        $complexity = 1;
+
+        // Iterate from start to end and count predicate nodes.
+        for ($i = ($start + 1); $i < $end; $i++) {
+            if (isset($find[$tokens[$i]['code']]) === true) {
+                $complexity++;
+            }
+        }
+
+        if ($complexity > $this->absoluteComplexity) {
+            $error = 'Function\'s cyclomatic complexity (%s) exceeds allowed maximum of %s';
+            $data  = array(
+                      $complexity,
+                      $this->absoluteComplexity,
+                     );
+            $phpcsFile->addError($error, $stackPtr, 'MaxExceeded', $data);
+        } else if ($complexity > $this->complexity) {
+            $warning = 'Function\'s cyclomatic complexity (%s) exceeds %s; consider refactoring the function';
+            $data    = array(
+                        $complexity,
+                        $this->complexity,
+                       );
+            $phpcsFile->addWarning($warning, $stackPtr, 'TooHigh', $data);
+        }
+
+    }//end process()
+
+
 }//end class

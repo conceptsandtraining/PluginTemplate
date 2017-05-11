@@ -27,40 +27,44 @@ class MySource_Sniffs_Objects_DisallowNewWidgetSniff implements PHP_CodeSniffer_
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_NEW);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_NEW);
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		$className = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
-		if ($tokens[$className]['code'] !== T_STRING) {
-			return;
-		}
+        $className = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
+        if ($tokens[$className]['code'] !== T_STRING) {
+            return;
+        }
 
-		if (substr(strtolower($tokens[$className]['content']), -10) === 'widgettype') {
-			$widgetType = substr($tokens[$className]['content'], 0, -10);
-			$error      = 'Manual creation of widget objects is banned; use Widget::getWidget(\'%s\'); instead';
-			$data       = array($widgetType);
-			$phpcsFile->addError($error, $stackPtr, 'Found', $data);
-		}
-	}//end process()
+        if (substr(strtolower($tokens[$className]['content']), -10) === 'widgettype') {
+            $widgetType = substr($tokens[$className]['content'], 0, -10);
+            $error      = 'Manual creation of widget objects is banned; use Widget::getWidget(\'%s\'); instead';
+            $data       = array($widgetType);
+            $phpcsFile->addError($error, $stackPtr, 'Found', $data);
+        }
+
+    }//end process()
+
+
 }//end class

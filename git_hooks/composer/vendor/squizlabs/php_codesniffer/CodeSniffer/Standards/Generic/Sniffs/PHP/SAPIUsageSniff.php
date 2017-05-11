@@ -29,47 +29,51 @@ class Generic_Sniffs_PHP_SAPIUsageSniff implements PHP_CodeSniffer_Sniff
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_STRING);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_STRING);
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in
-	 *                                        the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in
+     *                                        the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		$ignore = array(
-				   T_DOUBLE_COLON    => true,
-				   T_OBJECT_OPERATOR => true,
-				   T_FUNCTION        => true,
-				   T_CONST           => true,
-				  );
+        $ignore = array(
+                   T_DOUBLE_COLON    => true,
+                   T_OBJECT_OPERATOR => true,
+                   T_FUNCTION        => true,
+                   T_CONST           => true,
+                  );
 
-		$prevToken = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
-		if (isset($ignore[$tokens[$prevToken]['code']]) === true) {
-			// Not a call to a PHP function.
-			return;
-		}
+        $prevToken = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1), null, true);
+        if (isset($ignore[$tokens[$prevToken]['code']]) === true) {
+            // Not a call to a PHP function.
+            return;
+        }
 
-		$function = strtolower($tokens[$stackPtr]['content']);
-		if ($function === 'php_sapi_name') {
-			$error = 'Use the PHP_SAPI constant instead of calling php_sapi_name()';
-			$phpcsFile->addError($error, $stackPtr, 'FunctionFound');
-		}
-	}//end process()
+        $function = strtolower($tokens[$stackPtr]['content']);
+        if ($function === 'php_sapi_name') {
+            $error = 'Use the PHP_SAPI constant instead of calling php_sapi_name()';
+            $phpcsFile->addError($error, $stackPtr, 'FunctionFound');
+        }
+
+    }//end process()
+
+
 }//end class

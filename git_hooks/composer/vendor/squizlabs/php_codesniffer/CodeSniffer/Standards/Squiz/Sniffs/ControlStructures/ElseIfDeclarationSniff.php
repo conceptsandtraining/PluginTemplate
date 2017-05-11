@@ -32,32 +32,36 @@ class Squiz_Sniffs_ControlStructures_ElseIfDeclarationSniff implements PHP_CodeS
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_ELSEIF);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_ELSEIF);
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in the
-	 *                                        stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$error = 'Usage of ELSEIF not allowed; use ELSE IF instead';
-		$fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
-		if ($fix === true) {
-			$phpcsFile->fixer->replaceToken($stackPtr, 'else if');
-		}
-	}//end process()
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in the
+     *                                        stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $error = 'Usage of ELSEIF not allowed; use ELSE IF instead';
+        $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'NotAllowed');
+        if ($fix === true) {
+            $phpcsFile->fixer->replaceToken($stackPtr, 'else if');
+        }
+
+    }//end process()
+
+
 }//end class

@@ -27,32 +27,36 @@ class Generic_Sniffs_Files_OneInterfacePerFileSniff implements PHP_CodeSniffer_S
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_INTERFACE);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_INTERFACE);
+
+    }//end register()
 
 
-	/**
-	 * Processes this sniff, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in
-	 *                                        the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$nextInterface = $phpcsFile->findNext($this->register(), ($stackPtr + 1));
-		if ($nextInterface !== false) {
-			$error = 'Only one interface is allowed in a file';
-			$phpcsFile->addError($error, $nextInterface, 'MultipleFound');
-		}
-	}//end process()
+    /**
+     * Processes this sniff, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in
+     *                                        the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $nextInterface = $phpcsFile->findNext($this->register(), ($stackPtr + 1));
+        if ($nextInterface !== false) {
+            $error = 'Only one interface is allowed in a file';
+            $phpcsFile->addError($error, $nextInterface, 'MultipleFound');
+        }
+
+    }//end process()
+
+
 }//end class

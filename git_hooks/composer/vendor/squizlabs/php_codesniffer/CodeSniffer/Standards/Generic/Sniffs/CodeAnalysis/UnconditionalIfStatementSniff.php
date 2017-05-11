@@ -45,56 +45,60 @@ class Generic_Sniffs_CodeAnalysis_UnconditionalIfStatementSniff implements PHP_C
 {
 
 
-	/**
-	 * Registers the tokens that this sniff wants to listen for.
-	 *
-	 * @return int[]
-	 */
-	public function register()
-	{
-		return array(
-				T_IF,
-				T_ELSEIF,
-			   );
-	}//end register()
+    /**
+     * Registers the tokens that this sniff wants to listen for.
+     *
+     * @return int[]
+     */
+    public function register()
+    {
+        return array(
+                T_IF,
+                T_ELSEIF,
+               );
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[$stackPtr];
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
+        $token  = $tokens[$stackPtr];
 
-		// Skip for-loop without body.
-		if (isset($token['parenthesis_opener']) === false) {
-			return;
-		}
+        // Skip for-loop without body.
+        if (isset($token['parenthesis_opener']) === false) {
+            return;
+        }
 
-		$next = ++$token['parenthesis_opener'];
-		$end  = --$token['parenthesis_closer'];
+        $next = ++$token['parenthesis_opener'];
+        $end  = --$token['parenthesis_closer'];
 
-		$goodCondition = false;
-		for (; $next <= $end; ++$next) {
-			$code = $tokens[$next]['code'];
+        $goodCondition = false;
+        for (; $next <= $end; ++$next) {
+            $code = $tokens[$next]['code'];
 
-			if (isset(PHP_CodeSniffer_Tokens::$emptyTokens[$code]) === true) {
-				continue;
-			} elseif ($code !== T_TRUE && $code !== T_FALSE) {
-				$goodCondition = true;
-			}
-		}
+            if (isset(PHP_CodeSniffer_Tokens::$emptyTokens[$code]) === true) {
+                continue;
+            } else if ($code !== T_TRUE && $code !== T_FALSE) {
+                $goodCondition = true;
+            }
+        }
 
-		if ($goodCondition === false) {
-			$error = 'Avoid IF statements that are always true or false';
-			$phpcsFile->addWarning($error, $stackPtr, 'Found');
-		}
-	}//end process()
+        if ($goodCondition === false) {
+            $error = 'Avoid IF statements that are always true or false';
+            $phpcsFile->addWarning($error, $stackPtr, 'Found');
+        }
+
+    }//end process()
+
+
 }//end class

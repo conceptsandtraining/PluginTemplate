@@ -27,48 +27,52 @@ class Generic_Sniffs_Files_LowercasedFilenameSniff implements PHP_CodeSniffer_Sn
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_OPEN_TAG);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_OPEN_TAG);
+
+    }//end register()
 
 
-	/**
-	 * Processes this sniff, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in
-	 *                                        the stack passed in $tokens.
-	 *
-	 * @return int
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$filename = $phpcsFile->getFilename();
-		if ($filename === 'STDIN') {
-			return;
-		}
+    /**
+     * Processes this sniff, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in
+     *                                        the stack passed in $tokens.
+     *
+     * @return int
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $filename = $phpcsFile->getFilename();
+        if ($filename === 'STDIN') {
+            return;
+        }
 
-		$filename          = basename($filename);
-		$lowercaseFilename = strtolower($filename);
-		if ($filename !== $lowercaseFilename) {
-			$data  = array(
-					  $filename,
-					  $lowercaseFilename,
-					 );
-			$error = 'Filename "%s" doesn\'t match the expected filename "%s"';
-			$phpcsFile->addError($error, $stackPtr, 'NotFound', $data);
-			$phpcsFile->recordMetric($stackPtr, 'Lowercase filename', 'no');
-		} else {
-			$phpcsFile->recordMetric($stackPtr, 'Lowercase filename', 'yes');
-		}
+        $filename          = basename($filename);
+        $lowercaseFilename = strtolower($filename);
+        if ($filename !== $lowercaseFilename) {
+            $data  = array(
+                      $filename,
+                      $lowercaseFilename,
+                     );
+            $error = 'Filename "%s" doesn\'t match the expected filename "%s"';
+            $phpcsFile->addError($error, $stackPtr, 'NotFound', $data);
+            $phpcsFile->recordMetric($stackPtr, 'Lowercase filename', 'no');
+        } else {
+            $phpcsFile->recordMetric($stackPtr, 'Lowercase filename', 'yes');
+        }
 
-		// Ignore the rest of the file.
-		return ($phpcsFile->numTokens + 1);
-	}//end process()
+        // Ignore the rest of the file.
+        return ($phpcsFile->numTokens + 1);
+
+    }//end process()
+
+
 }//end class
