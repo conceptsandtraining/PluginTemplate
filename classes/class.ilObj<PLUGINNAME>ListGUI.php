@@ -4,7 +4,7 @@ include_once("./Services/Repository/classes/class.ilObjectPluginListGUI.php");
 /**
  * List gui class for plugin object in repository
  */
-class ilObj<PLUGINNAME>ListGUI.php extends ilObjectPluginListGUI {
+class ilObj<PLUGINNAME>ListGUI extends ilObjectPluginListGUI {
 	/**
 	 * Init the type of the plugin. Same value as choosen in plugin.php
 	 */

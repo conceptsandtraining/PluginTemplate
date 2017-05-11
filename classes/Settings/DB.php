@@ -5,11 +5,6 @@
  */
 interface DB {
 	/**
-	 * Install tables and standard contents and types.
-	 */
-	public function install();
-
-	/**
 	 * Update settings of an existing repo object.
 	 *
 	 * @param	<PLUGINNAME>		$settings
