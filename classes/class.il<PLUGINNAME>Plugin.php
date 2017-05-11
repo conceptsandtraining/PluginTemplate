@@ -5,6 +5,7 @@ include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php")
  * Plugin base class. Keeps all information the plugin needs
  */
 class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
+	const COPY_OPERATION_ID = 58;
 	/**
 	 * Get the name of the Plugin
 	 *
@@ -100,7 +101,6 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 
 	/**
 	 * Assign permission copy to current plugin
-	 * Operation id 58: copy
 	 *
 	 * @param int 		$type_id
 	 * @param 			$db
@@ -108,7 +108,7 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	 * @return int
 	 */
 	protected function assignCopyPermissionToPlugin($type_id, $db) {
-		$ops = array(58);
+		$ops = array(self::COPY_OPERATION_ID);
 
 		foreach ($ops as $op) {
 			// check whether type exists in object data, if not, create the type
