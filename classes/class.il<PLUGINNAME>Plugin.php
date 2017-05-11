@@ -4,7 +4,7 @@ include_once("./Services/Repository/classes/class.ilCronHookPlugin.php");
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilCronHookPlugin {
+class il<PLUGINNAME>Plugin extends ilCronHookPlugin {
 	/**
 	 * Get the name of the Plugin
 	 *
