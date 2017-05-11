@@ -28,69 +28,73 @@
 class MySource_Sniffs_CSS_BrowserSpecificStylesSniff implements PHP_CodeSniffer_Sniff
 {
 
-	/**
-	 * A list of tokenizers this sniff supports.
-	 *
-	 * @var array
-	 */
-	public $supportedTokenizers = array('CSS');
+    /**
+     * A list of tokenizers this sniff supports.
+     *
+     * @var array
+     */
+    public $supportedTokenizers = array('CSS');
 
-	/**
-	 * A list of specific stylesheet suffixes we allow.
-	 *
-	 * These stylesheets contain browser specific styles
-	 * so this sniff ignore them files in the form:
-	 * *_moz.css and *_ie7.css etc.
-	 *
-	 * @var array
-	 */
-	protected $specificStylesheets = array(
-									  'moz'    => true,
-									  'ie'     => true,
-									  'ie7'    => true,
-									  'ie8'    => true,
-									  'webkit' => true,
-									 );
-
-
-	/**
-	 * Returns the token types that this sniff is interested in.
-	 *
-	 * @return int[]
-	 */
-	public function register()
-	{
-		return array(T_STYLE);
-	}//end register()
+    /**
+     * A list of specific stylesheet suffixes we allow.
+     *
+     * These stylesheets contain browser specific styles
+     * so this sniff ignore them files in the form:
+     * *_moz.css and *_ie7.css etc.
+     *
+     * @var array
+     */
+    protected $specificStylesheets = array(
+                                      'moz'    => true,
+                                      'ie'     => true,
+                                      'ie7'    => true,
+                                      'ie8'    => true,
+                                      'webkit' => true,
+                                     );
 
 
-	/**
-	 * Processes the tokens that this sniff is interested in.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
-	 * @param int                  $stackPtr  The position in the stack where
-	 *                                        the token was found.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		// Ignore files with browser-specific suffixes.
-		$filename  = $phpcsFile->getFilename();
-		$breakChar = strrpos($filename, '_');
-		if ($breakChar !== false && substr($filename, -4) === '.css') {
-			$specific = substr($filename, ($breakChar + 1), -4);
-			if (isset($this->specificStylesheets[$specific]) === true) {
-				return;
-			}
-		}
+    /**
+     * Returns the token types that this sniff is interested in.
+     *
+     * @return int[]
+     */
+    public function register()
+    {
+        return array(T_STYLE);
 
-		$tokens  = $phpcsFile->getTokens();
-		$content = $tokens[$stackPtr]['content'];
+    }//end register()
 
-		if ($content{0} === '-') {
-			$error = 'Browser-specific styles are not allowed';
-			$phpcsFile->addError($error, $stackPtr, 'ForbiddenStyle');
-		}
-	}//end process()
+
+    /**
+     * Processes the tokens that this sniff is interested in.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+     * @param int                  $stackPtr  The position in the stack where
+     *                                        the token was found.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        // Ignore files with browser-specific suffixes.
+        $filename  = $phpcsFile->getFilename();
+        $breakChar = strrpos($filename, '_');
+        if ($breakChar !== false && substr($filename, -4) === '.css') {
+            $specific = substr($filename, ($breakChar + 1), -4);
+            if (isset($this->specificStylesheets[$specific]) === true) {
+                return;
+            }
+        }
+
+        $tokens  = $phpcsFile->getTokens();
+        $content = $tokens[$stackPtr]['content'];
+
+        if ($content{0} === '-') {
+            $error = 'Browser-specific styles are not allowed';
+            $phpcsFile->addError($error, $stackPtr, 'ForbiddenStyle');
+        }
+
+    }//end process()
+
+
 }//end class

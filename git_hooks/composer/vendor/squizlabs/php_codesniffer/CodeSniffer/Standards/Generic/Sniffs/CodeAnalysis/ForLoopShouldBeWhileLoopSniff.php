@@ -41,58 +41,62 @@ class Generic_Sniffs_CodeAnalysis_ForLoopShouldBeWhileLoopSniff implements PHP_C
 {
 
 
-	/**
-	 * Registers the tokens that this sniff wants to listen for.
-	 *
-	 * @return int[]
-	 */
-	public function register()
-	{
-		return array(T_FOR);
-	}//end register()
+    /**
+     * Registers the tokens that this sniff wants to listen for.
+     *
+     * @return int[]
+     */
+    public function register()
+    {
+        return array(T_FOR);
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token
-	 *                                        in the stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
-		$token  = $tokens[$stackPtr];
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token
+     *                                        in the stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
+        $token  = $tokens[$stackPtr];
 
-		// Skip invalid statement.
-		if (isset($token['parenthesis_opener']) === false) {
-			return;
-		}
+        // Skip invalid statement.
+        if (isset($token['parenthesis_opener']) === false) {
+            return;
+        }
 
-		$next = ++$token['parenthesis_opener'];
-		$end  = --$token['parenthesis_closer'];
+        $next = ++$token['parenthesis_opener'];
+        $end  = --$token['parenthesis_closer'];
 
-		$parts = array(
-				  0,
-				  0,
-				  0,
-				 );
-		$index = 0;
+        $parts = array(
+                  0,
+                  0,
+                  0,
+                 );
+        $index = 0;
 
-		for (; $next <= $end; ++$next) {
-			$code = $tokens[$next]['code'];
-			if ($code === T_SEMICOLON) {
-				++$index;
-			} elseif (isset(PHP_CodeSniffer_Tokens::$emptyTokens[$code]) === false) {
-				++$parts[$index];
-			}
-		}
+        for (; $next <= $end; ++$next) {
+            $code = $tokens[$next]['code'];
+            if ($code === T_SEMICOLON) {
+                ++$index;
+            } else if (isset(PHP_CodeSniffer_Tokens::$emptyTokens[$code]) === false) {
+                ++$parts[$index];
+            }
+        }
 
-		if ($parts[0] === 0 && $parts[2] === 0 && $parts[1] > 0) {
-			$error = 'This FOR loop can be simplified to a WHILE loop';
-			$phpcsFile->addWarning($error, $stackPtr, 'CanSimplify');
-		}
-	}//end process()
+        if ($parts[0] === 0 && $parts[2] === 0 && $parts[1] > 0) {
+            $error = 'This FOR loop can be simplified to a WHILE loop';
+            $phpcsFile->addWarning($error, $stackPtr, 'CanSimplify');
+        }
+
+    }//end process()
+
+
 }//end class

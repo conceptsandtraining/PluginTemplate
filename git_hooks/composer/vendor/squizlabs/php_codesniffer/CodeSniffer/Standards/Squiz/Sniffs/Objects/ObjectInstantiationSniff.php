@@ -31,47 +31,51 @@ class Squiz_Sniffs_Objects_ObjectInstantiationSniff implements PHP_CodeSniffer_S
 {
 
 
-	/**
-	 * Registers the token types that this sniff wishes to listen to.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_NEW);
-	}//end register()
+    /**
+     * Registers the token types that this sniff wishes to listen to.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(T_NEW);
+
+    }//end register()
 
 
-	/**
-	 * Process the tokens that this sniff is listening for.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
-	 * @param int                  $stackPtr  The position in the stack where
-	 *                                        the token was found.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Process the tokens that this sniff is listening for.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file where the token was found.
+     * @param int                  $stackPtr  The position in the stack where
+     *                                        the token was found.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		$allowedTokens   = PHP_CodeSniffer_Tokens::$emptyTokens;
-		$allowedTokens[] = T_BITWISE_AND;
+        $allowedTokens   = PHP_CodeSniffer_Tokens::$emptyTokens;
+        $allowedTokens[] = T_BITWISE_AND;
 
-		$prev = $phpcsFile->findPrevious($allowedTokens, ($stackPtr - 1), null, true);
+        $prev = $phpcsFile->findPrevious($allowedTokens, ($stackPtr - 1), null, true);
 
-		$allowedTokens = array(
-						  T_EQUAL        => true,
-						  T_DOUBLE_ARROW => true,
-						  T_THROW        => true,
-						  T_RETURN       => true,
-						  T_INLINE_THEN  => true,
-						  T_INLINE_ELSE  => true,
-						 );
+        $allowedTokens = array(
+                          T_EQUAL        => true,
+                          T_DOUBLE_ARROW => true,
+                          T_THROW        => true,
+                          T_RETURN       => true,
+                          T_INLINE_THEN  => true,
+                          T_INLINE_ELSE  => true,
+                         );
 
-		if (isset($allowedTokens[$tokens[$prev]['code']]) === false) {
-			$error = 'New objects must be assigned to a variable';
-			$phpcsFile->addError($error, $stackPtr, 'NotAssigned');
-		}
-	}//end process()
+        if (isset($allowedTokens[$tokens[$prev]['code']]) === false) {
+            $error = 'New objects must be assigned to a variable';
+            $phpcsFile->addError($error, $stackPtr, 'NotAssigned');
+        }
+
+    }//end process()
+
+
 }//end class

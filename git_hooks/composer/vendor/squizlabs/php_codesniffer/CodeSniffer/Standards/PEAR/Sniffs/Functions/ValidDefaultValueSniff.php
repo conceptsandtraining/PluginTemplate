@@ -32,71 +32,67 @@ class PEAR_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_Sn
 {
 
 
-	/**
-	 * Returns an array of tokens this test wants to listen for.
-	 *
-	 * @return array
-	 */
-	public function register()
-	{
-		return array(T_FUNCTION);
-	}//end register()
+    /**
+     * Returns an array of tokens this test wants to listen for.
+     *
+     * @return array
+     */
+    public function register()
+    {
+        return array(
+                T_FUNCTION,
+                T_CLOSURE,
+               );
+
+    }//end register()
 
 
-	/**
-	 * Processes this test, when one of its tokens is encountered.
-	 *
-	 * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
-	 * @param int                  $stackPtr  The position of the current token in the
-	 *                                        stack passed in $tokens.
-	 *
-	 * @return void
-	 */
-	public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
-	{
-		$tokens = $phpcsFile->getTokens();
+    /**
+     * Processes this test, when one of its tokens is encountered.
+     *
+     * @param PHP_CodeSniffer_File $phpcsFile The file being scanned.
+     * @param int                  $stackPtr  The position of the current token in the
+     *                                        stack passed in $tokens.
+     *
+     * @return void
+     */
+    public function process(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
+    {
+        $tokens = $phpcsFile->getTokens();
 
-		$argStart = $tokens[$stackPtr]['parenthesis_opener'];
-		$argEnd   = $tokens[$stackPtr]['parenthesis_closer'];
+        $argStart = $tokens[$stackPtr]['parenthesis_opener'];
+        $argEnd   = $tokens[$stackPtr]['parenthesis_closer'];
 
-		// Flag for when we have found a default in our arg list.
-		// If there is a value without a default after this, it is an error.
-		$defaultFound = false;
+        // Flag for when we have found a default in our arg list.
+        // If there is a value without a default after this, it is an error.
+        $defaultFound = false;
 
-		$nextArg = $argStart;
-		while (($nextArg = $phpcsFile->findNext(T_VARIABLE, ($nextArg + 1), $argEnd)) !== false) {
-			if ($tokens[($nextArg - 1)]['code'] === T_ELLIPSIS) {
-				continue;
-			}
+        $params = $phpcsFile->getMethodParameters($stackPtr);
+        foreach ($params as $param) {
+            if ($param['variable_length'] === true) {
+                continue;
+            }
 
-			$argHasDefault = false;
+            if (array_key_exists('default', $param) === true) {
+                $defaultFound = true;
+                // Check if the arg is type hinted and using NULL for the default.
+                // This does not make the argument optional - it just allows NULL
+                // to be passed in.
+                if ($param['type_hint'] !== '' && strtolower($param['default']) === 'null') {
+                    $defaultFound = false;
+                }
 
-			$next = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($nextArg + 1), null, true);
-			if ($tokens[$next]['code'] === T_EQUAL) {
-				$argHasDefault = true;
-			}
+                continue;
+            }
 
-			if ($argHasDefault === false && $defaultFound === true) {
-				$error = 'Arguments with default values must be at the end of the argument list';
-				$phpcsFile->addError($error, $nextArg, 'NotAtEnd');
-				return;
-			}
+            if ($defaultFound === true) {
+                $error = 'Arguments with default values must be at the end of the argument list';
+                $phpcsFile->addError($error, $param['token'], 'NotAtEnd');
+                return;
+            }
+        }//end foreach
 
-			if ($argHasDefault === true) {
-				$defaultFound = true;
-				// Check if the arg is type hinted and using NULL for the default.
-				// This does not make the argument optional - it just allows NULL
-				// to be passed in.
-				$next = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($next + 1), null, true);
-				if ($tokens[$next]['code'] === T_NULL) {
-					$prev = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($nextArg - 1), null, true);
-					if ($tokens[$prev]['code'] === T_STRING
-						|| $tokens[$prev]['code'] === T_ARRAY_HINT
-					) {
-						$defaultFound = false;
-					}
-				}
-			}
-		}//end while
-	}//end process()
+    }//end process()
+
+
 }//end class
