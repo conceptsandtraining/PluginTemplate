@@ -9,3 +9,10 @@
 * Set plugin type in files
 * Update composer
 ```
+
+# Disable link option
+```
+* Open ilObj<PLUGINNAME>ListGUI.php
+* Browse to function "initListActions" (If not exist create)
+* Set class property "link_enabled" to "false"
+```
