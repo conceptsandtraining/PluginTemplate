@@ -1,6 +1,5 @@
 <?php
 // alphanumerical ID of the plugin; never change this
-// up to 4 letters
 $id = "";
 
 // code version; must be changed for all code changes
