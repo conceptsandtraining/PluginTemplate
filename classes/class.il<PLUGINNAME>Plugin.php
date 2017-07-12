@@ -4,7 +4,7 @@ require_once("./Services/EventHandling/classes/class.ilEventHookPlugin.php");
 /**
  * Plugin base class. Keeps all information the plugin needs
  */
-class il<PLUGINNAME>Plugin.php extends ilEventHookPlugin {
+class il<PLUGINNAME>Plugin extends ilEventHookPlugin {
 	/**
 	 * Perform command if the event is thrown
 	 *
