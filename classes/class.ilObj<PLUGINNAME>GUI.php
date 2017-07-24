@@ -17,14 +17,14 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI {
 	/**
 	* Get type.  Same value as choosen in plugin.php
 	*/
-	final function getType() {
+	final public function getType() {
 		return "";
 	}
 
 	/**
 	* Handles all commmands of this class, centralizes permission checks
 	*/
-	function performCommand($cmd) {
+	public function performCommand($cmd) {
 		switch ($cmd) {
 			default:
 		}
@@ -33,14 +33,14 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI {
 	/**
 	* After object has been created -> jump to this command
 	*/
-	function getAfterCreationCmd() {
+	public function getAfterCreationCmd() {
 		return "";
 	}
 
 	/**
 	* Get standard command
 	*/
-	function getStandardCmd() {
+	public function getStandardCmd() {
 		return "";
 	}
 }

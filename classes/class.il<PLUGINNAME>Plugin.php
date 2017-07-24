@@ -11,7 +11,7 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	 *
 	 * @return string
 	 */
-	function getPluginName() {
+	public function getPluginName() {
 		return "<PLUGINNAME>";
 	}
 
@@ -51,7 +51,7 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	 * @return bool
 	 */
 	protected function isRepositoryPlugin($type) {
-		return substr($type, 0, 1) == "x");
+		return substr($type, 0, 1) == "x";
 	}
 
 	/**

@@ -15,14 +15,14 @@ class ilObj<PLUGINNAME>ListGUI extends ilObjectPluginListGUI {
 	/**
 	 * Get name of gui class handling the commands
 	 */
-	function getGuiClass() {
+	public function getGuiClass() {
 		return "ilObj<PLUGINNAME>GUI";
 	}
 
 	/**
 	 * Get commands
 	 */
-	function initCommands() {
+	public function initCommands() {
 
 		return array(array("permission" => "read",
 							"cmd" => "showContent",
