@@ -1,5 +1,5 @@
 <?php
-include_once("./Services/Repository/classes/class.ilCronHookPlugin.php");
+include_once("./Services/Cron/classes/class.ilCronHookPlugin.php");
 
 /**
  * Plugin base class. Keeps all information the plugin needs
@@ -27,6 +27,6 @@ class il<PLUGINNAME>Plugin extends ilCronHookPlugin {
 	 *
 	 * @return il<PLUGINNAME>Job
 	 */
-	public function getCronJobInstance() {
+	public function getCronJobInstance($a_job_id) {
 	}
 }
