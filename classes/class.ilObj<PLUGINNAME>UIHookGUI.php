@@ -1,5 +1,5 @@
 <?php
-include_once("./Services/Repository/classes/class.ilUIHookPluginGUI.php");
+include_once("./Services/UIComponent/classes/class.ilUIHookPluginGUI.php");
 
 /**
  * Plugin object GUI class. Manipulates the output at every page call
