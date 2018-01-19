@@ -1,5 +1,5 @@
 <?php
-include_once("./Services/Repository/classes/class.ilUserInterfaceHookPlugin.php");
+include_once("./Services/UIComponent/classes/class.ilUserInterfaceHookPlugin.php");
 
 /**
  * Plugin base class. Keeps all information the plugin needs
