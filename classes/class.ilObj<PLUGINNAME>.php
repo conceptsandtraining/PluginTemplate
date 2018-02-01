@@ -131,7 +131,8 @@ class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 	 *
 	 * @return 	string[]
 	 */
-	protected function getParentTypes() {
+	protected function getParentTypes()
+	{
 		return array("crs");
 	}
 }
