@@ -1,9 +1,11 @@
 <?php
+namespace CaT\Plugins\{{PLUGINNAME}}\Settings;
 
 /**
  * This trait defines functions you need to create form elements or values
  * for the settings. E.g. the Object has additional setting "OrgUnit".
  */
-trait ilFormHelper {
+trait ilFormHelper
+{
 
 }
