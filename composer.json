@@ -1,7 +1,10 @@
 {
 	"autoload" : {
 		"psr-4" : {
-			"CaT\\Plugins\\{{PLUGINNAME}}\\" : "./classes"
+			"CaT\\Plugins\\{{PLUGINNAME}}\\" : ["./classes", "./tests"]
 		}
+	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^5.7"
 	}
 }
