@@ -87,6 +87,14 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI
 		$cmd = $this->g_ctrl->getCmd();
 		$next_class = $this->g_ctrl->getNextClass();
 
+		if(!$this->object->getSettings()->getIsOnline()) {
+			$this->g_tpl->setAlertProperties(array(
+			[
+				"alert" => true,
+				"property" => $this->g_lng->txt("status"),
+				"value" => $this->g_lng->txt("offline")
+			]));
+		}
 		switch ($next_class) {
 			case 'ilsettingsgui':
 				$this->forwardSettings();
