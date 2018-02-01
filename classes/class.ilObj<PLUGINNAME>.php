@@ -14,6 +14,10 @@ class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 	protected $object_actions;
 
 	/**
+	 * @var 
+	 */
+
+	/**
 	 * Get called if the object get be coppied.
 	 * Copy additional settings to new object.
 	 *
@@ -107,6 +111,16 @@ class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 	}
 
 	/**
+	 * Get settings.
+	 *
+	 * @return 	void
+	 */
+	public function getSettings()
+	{
+		return $this->settings;
+	}
+
+	/**
 	 * Init the type of the plugin. Same value as choosen in plugin.php
 	 */
 	public function initType()
@@ -124,6 +138,17 @@ class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 		return function ($code) {
 			return $this->txt($code);
 		};
+	}
+
+	/**
+	 * Update Settings.
+	 *
+	 * @param 	\Closure 	$c
+	 * @return 	void
+	 */
+	public function updateSettings(\Closure $c)
+	{
+		$this->settings = $c($this->settings);
 	}
 
 	/**
