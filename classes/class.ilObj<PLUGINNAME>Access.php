@@ -3,6 +3,9 @@ require_once 'Services/Repository/classes/class.ilObjectPluginAccess.php';
 
 /**
  * Access checker for each plugin object.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
 class ilObj<PLUGINNAME>Access extends ilObjectPluginAccess
 {
@@ -19,7 +22,7 @@ class ilObj<PLUGINNAME>Access extends ilObjectPluginAccess
 	 * @param 	int 		$a_obj_id 			object id
 	 * @param 	int 		$a_user_id 			user id (default is current user)
 	 *
-	 * @return 	boolean 						true, if everything is ok
+	 * @return 	bool 							true, if everything is ok
 	 */
 	public function _checkAccess($a_cmd, $a_permission, $a_ref_id, $a_obj_id, $a_user_id = "")
 	{
@@ -48,7 +51,9 @@ class ilObj<PLUGINNAME>Access extends ilObjectPluginAccess
 	}
 
 	/**
-	 * Check online status of object
+	 * Check online status of object.
+	 *
+	 * @return 	bool
 	 */
 	static public function _isOffline($a_id)
 	{
