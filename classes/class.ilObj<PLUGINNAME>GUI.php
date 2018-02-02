@@ -2,10 +2,13 @@
 include_once("./Services/Repository/classes/class.ilObjectPluginGUI.php");
 
 /**
- * Plugin object GUI class. Baseclass for all GUI action in ILIAS
+ * Plugin object GUI class. Baseclass for all GUI action in ILIAS.
  *
  * @ilCtrl_isCalledBy ilObj<PLUGINNAME>GUI: ilRepositoryGUI, ilAdministrationGUI, ilObjPluginDispatchGUI
  * @ilCtrl_Calls ilObj<PLUGINNAME>GUI: ilPermissionGUI, ilInfoScreenGUI, ilObjectCopyGUI, ilCommonActionDispatcherGUI
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
 class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI
 {
@@ -87,14 +90,7 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI
 		$cmd = $this->g_ctrl->getCmd();
 		$next_class = $this->g_ctrl->getNextClass();
 
-		if(!$this->object->getSettings()->getIsOnline()) {
-			$this->g_tpl->setAlertProperties(array(
-			[
-				"alert" => true,
-				"property" => $this->g_lng->txt("status"),
-				"value" => $this->g_lng->txt("offline")
-			]));
-		}
+		$this->setTitleByline();
 		switch ($next_class) {
 			case 'ilsettingsgui':
 				$this->forwardSettings();
@@ -144,6 +140,25 @@ class ilObj<PLUGINNAME>GUI  extends ilObjectPluginGUI
 			$this->object->txtClosure()
 		);
 		$this->g_ctrl->forwardCommand($gui);
+	}
+
+	/**
+	 * Set the title byline to offline if object is offline.
+	 *
+	 * @return 	void
+	 */
+	protected function setTitleByline()
+	{
+		require_once(__DIR__ . "/ilObj<PLUGINNAME>Access.php");
+
+		if(ilObj<PLUGINNAME>Access::_isOffline()) {
+			$this->g_tpl->setAlertProperties(array(
+			[
+				"alert" => true,
+				"property" => $this->g_lng->txt("status"),
+				"value" => $this->g_lng->txt("offline")
+			]));
+		}
 	}
 
 	/**
