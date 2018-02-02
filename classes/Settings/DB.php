@@ -1,8 +1,11 @@
 <?php
-namespace CaT\Plugins\{{PLUGINNAME}}\Settings;
+namespace CaT\Plugins\<PLUGINNAME>\Settings;
 
 /**
- * Interface for DB handle of additional setting values
+ * Interface for DB handle of additional setting values.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
 interface DB
 {
@@ -29,7 +32,7 @@ interface DB
 	 * Return <PLUGINNAME> for $obj_id.
 	 *
 	 * @param 	int $obj_id
-	 * @return \CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
+	 * @return 	\CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
 	 */
 	public function selectFor($obj_id);
 
@@ -37,6 +40,7 @@ interface DB
 	 * Delete all information of the given obj id.
 	 *
 	 * @param 	int 	$obj_id
+	 * @return 	void
 	 */
 	public function deleteFor($obj_id);
 }
