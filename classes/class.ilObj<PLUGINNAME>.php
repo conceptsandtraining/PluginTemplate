@@ -1,10 +1,13 @@
 <?php
 include_once("Services/Repository/classes/class.ilObjectPlugin.php");
 
-use CaT\Plugins\{{PLUGINNAME}}\ilObjectActions;
+use CaT\Plugins\<PLUGINNAME>\ilObjectActions;
 
 /**
- * Object of the plugin
+ * Object of the plugin.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
 class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 {
