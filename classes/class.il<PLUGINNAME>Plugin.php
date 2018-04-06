@@ -17,7 +17,7 @@ class il<PLUGINNAME>Plugin extends ilCronHookPlugin {
 	/**
 	 * Get an array with 1 to n numbers of cronjob objects
 	 *
-	 * @return il<PLUGINNAME>Job[]
+	 * @return ilCronJob[]
 	 */
 	public function getCronJobInstances() {
 	}
@@ -25,7 +25,7 @@ class il<PLUGINNAME>Plugin extends ilCronHookPlugin {
 	/**
 	 * Get a single cronjob object
 	 *
-	 * @return il<PLUGINNAME>Job
+	 * @return ilCronJob
 	 */
 	public function getCronJobInstance($a_job_id) {
 	}
