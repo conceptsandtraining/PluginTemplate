@@ -6,7 +6,7 @@ SCRIPT_PATH=$(dirname "$0");
 cd $SCRIPT_PATH;
 
 # note: no more parameters
-phpunit --bootstrap ./vendor/autoload.php tests;
+phpunit --bootstrap ./vendor/autoload.php --exclude-group needsInstalledILIAS tests;
 
 #first param is path to ilias installation
 if [ $1 ] ; then
