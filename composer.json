@@ -1,2 +1,10 @@
 {
+	"autoload" : {
+		"psr-4" : {
+			"CaT\\Plugins\\{{PLUGINNAME}}\\" : ["./classes", "./tests"]
+		}
+	},
+	"config" : {
+		"autoloader-suffix" : "{PLUGINNAME}"
+	}
 }
