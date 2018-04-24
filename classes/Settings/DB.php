@@ -1,13 +1,19 @@
 <?php
+namespace CaT\Plugins\<PLUGINNAME>\Settings;
 
 /**
- * Interface for DB handle of additional setting values
+ * Interface for DB handle of additional setting values.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
-interface DB {
+interface DB
+{
 	/**
 	 * Update settings of an existing repo object.
 	 *
 	 * @param	<PLUGINNAME>		$settings
+	 * @return 	void
 	 */
 	public function update(<PLUGINNAME> $settings);
 
@@ -18,24 +24,23 @@ interface DB {
 	 * @param	int		$study_content
 	 * @param	int		$study_type
 	 * @param	int		$credit_points
-	 *
-	 * @return \CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
+	 * @return 	\CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
 	 */
 	public function create($obj_id, /*additonal setting values*/);
 
 	/**
-	 * return <PLUGINNAME> for $obj_id
+	 * Return <PLUGINNAME> for $obj_id.
 	 *
-	 * @param int $obj_id
-	 *
-	 * @return \CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
+	 * @param 	int $obj_id
+	 * @return 	\CaT\Plugins\<PLUGINNAME>\Settings\<PLUGINNAME>
 	 */
 	public function selectFor($obj_id);
 
 	/**
-	 * Delete all information of the given obj id
+	 * Delete all information of the given obj id.
 	 *
 	 * @param 	int 	$obj_id
+	 * @return 	void
 	 */
 	public function deleteFor($obj_id);
 }

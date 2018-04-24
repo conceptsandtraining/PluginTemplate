@@ -2,40 +2,58 @@
 include_once("./Services/Repository/classes/class.ilObjectPluginListGUI.php");
 
 /**
- * List gui class for plugin object in repository
+ * List gui class for plugin object in repository.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
-class ilObj<PLUGINNAME>ListGUI extends ilObjectPluginListGUI {
+class ilObj<PLUGINNAME>ListGUI extends ilObjectPluginListGUI
+{
 	/**
-	 * Init the type of the plugin. Same value as choosen in plugin.php
+	 * Init the type of the plugin. Same value as choosen in plugin.php.
+	 *
+	 * @return 	void
 	 */
 	public function initType() {
 		$this->setType("");
 	}
 
 	/**
-	 * Get name of gui class handling the commands
+	 * Get name of gui class handling the commands.
+	 *
+	 * @return 	ilObj<PLUGINNAME>GUI
 	 */
 	public function getGuiClass() {
 		return "ilObj<PLUGINNAME>GUI";
 	}
 
 	/**
-	 * Get commands
+	 * Get commands.
+	 *
+	 * @return 	void
 	 */
 	public function initCommands() {
 
-		return array(array("permission" => "read",
-							"cmd" => "showContent",
-							"default" => true
-						),
-						array("permission" => "write",
-							"cmd" => "editProperties",
-							"txt" => $this->txt("edit"),
-							"default" => false
-						)
-				);
+		return array(
+			[
+				"permission" => "read",
+				"cmd" => "showContent",
+				"default" => true
+			],
+			[
+				"permission" => "write",
+				"cmd" => "editProperties",
+				"txt" => $this->txt("edit"),
+				"default" => false
+			]
+		);
 	}
 
+	/**
+	 * Init the commands for the list actions.
+	 *
+	 * @return 	void
+	 */
 	protected function initListActions()
 	{
 		$this->delete_enabled = true;
