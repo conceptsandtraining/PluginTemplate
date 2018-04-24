@@ -1,26 +1,99 @@
 <?php
 include_once("./Services/Repository/classes/class.ilRepositoryObjectPlugin.php");
 
+use CaT\Plugins\<PLUGINNAME>\ilPluginActions;
+
 /**
- * Plugin base class. Keeps all information the plugin needs
+ * Plugin base class. Keeps all information the plugin needs.
+ *
+ * @author
+ * @copyright Extended GPL, see LICENSE
  */
-class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
+class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin
+{
 	const COPY_OPERATION_ID = 58;
+
+	/**
+	 * @var ilPluginActions
+	 */
+	protected $plugin_actions;
+
+	/**
+	 * Decides if this repository plugin can be copied.
+	 *
+	 * @return bool
+	 */
+	public function allowCopy()
+	{
+		return true;
+	}
+
+	/**
+	 * Get an instance of ilPluginActions.
+	 *
+	 * @return 	ilPluginActions
+	 */
+	public function getPluginActions()
+	{
+		if($this->plugin_actions == null) {
+			$this->plugin_actions = new ilPluginActions();
+		}
+		return $this->plugin_actions;
+	}
+
 	/**
 	 * Get the name of the Plugin
 	 *
-	 * @return string
+	 * @return 	string
 	 */
-	public function getPluginName() {
+	public function getPluginName()
+	{
 		return "<PLUGINNAME>";
 	}
 
 	/**
-	 * Defines custom uninstall action like delete table or something else
+	 * Get a closure to get txts from plugin.
+	 *
+	 * @return \Closure
 	 */
-	protected function uninstallCustom() {
+	public function txtClosure()
+	{
+		return function ($code) {
+			return $this->txt($code);
+		};
 	}
 
+	/**
+	 * Assign permission copy to current plugin
+	 *
+	 * @param 	int 	$type_id
+	 * @param 			$db
+	 * @return 	int
+	 */
+	protected function assignCopyPermissionToPlugin($type_id, $db)
+	{
+		$ops = array(self::COPY_OPERATION_ID);
+
+		foreach ($ops as $op) {
+			// check whether type exists in object data, if not, create the type
+			if (!$this->permissionIsAssigned($type_id, $op, $db)) {
+				$db->manipulate(
+					"INSERT INTO".PHP_EOL
+					"    rbac_ta".PHP_EOL
+					"    (typ_id, ops_id)".PHP_EOL
+					"VALUES".PHP_EOL
+					"    (".
+					$db->quote($type_id, "integer").",".
+					$db->quote($op, "integer").
+					"    )".PHP_EOL
+				);
+			}
+		}
+	}
+
+	/**
+	 * @inheritdoc
+	 */
 	protected function beforeActivation()
 	{
 		parent::beforeActivation();
@@ -44,28 +117,72 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	}
 
 	/**
-	 * Check current plugin is repository plgind
+	 * Create a new entry in object data.
 	 *
-	 * @param string 	$type
-	 *
-	 * @return bool
+	 * @param 	string 	$type
+	 * @param 			$db
+	 * @return 	int
 	 */
-	protected function isRepositoryPlugin($type) {
+	protected function createTypeId($type, $db)
+	{
+		$type_id = $db->nextId("object_data");
+		$db->manipulate(
+			"INSERT INTO".PHP_EOL
+			"    object_data".PHP_EOL
+			"    (".PHP_EOL
+			"        obj_id,".PHP_EOL
+			"        type,".PHP_EOL
+			"        title,".PHP_EOL
+			"        description,".PHP_EOL
+			"        owner,".PHP_EOL
+			"        create_date,".PHP_EOL
+			"        last_update".PHP_EOL
+			"    )".PHP_EOL
+			"VALUES".PHP_EOL
+			"    (".
+			$db->quote($type_id, "integer").",".
+			$db->quote("typ", "text").",".
+			$db->quote($type, "text").",".
+			$db->quote("Plugin ".$this->getPluginName(), "text").",".
+			$db->quote(-1, "integer").",".
+			$db->quote(ilUtil::now(), "timestamp").",".
+			$db->quote(ilUtil::now(), "timestamp").
+			"    )".PHP_EOL
+		);
+
+		return $type_id;
+	}
+
+	/**
+	 * Check current plugin is repository plugin.
+	 *
+	 * @param 	string 	$type
+	 * @return 	bool
+	 */
+	protected function isRepositoryPlugin($type)
+	{
 		return substr($type, 0, 1) == "x";
 	}
 
 	/**
-	 * Get id of current type
+	 * Get id of current type.
 	 *
-	 * @param string 	$type
-	 * @param 			$db
-	 *
-	 * @return int | null
+	 * @param 	string 		$type
+	 * @param 				$db
+	 * @return 	int|null
 	 */
-	protected function getTypeId($type, $db) {
-		$set = $db->query("SELECT obj_id FROM object_data ".
-			" WHERE type = ".$db->quote("typ", "text").
-			" AND title = ".$db->quote($type, "text"));
+	protected function getTypeId($type, $db)
+	{
+		$set = $db->query(
+			"SELECT".PHP_EOL
+			"    obj_id".PHP_EOL
+			"FROM".PHP_EOL
+			"    object_data".PHP_EOL
+			"WHERE".PHP_EOL
+			"    type = ".$db->quote("typ", "text").PHP_EOL
+			"AND".PHP_EOL
+			"    title = ".$db->quote($type, "text").PHP_EOL
+		);
 
 		if($db->numRows($set) == 0) {
 			return null;
@@ -76,66 +193,25 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	}
 
 	/**
-	 * Create a new entry in object data
+	 * Checks whether permission is not assigned to plugin.
 	 *
-	 * @param string 	$type
-	 * @param 			$db
-	 *
-	 * @return int
+	 * @param 	int 		$type_id
+	 * @param 	int 		$op_id
+	 * @param 				$db
+	 * @return 	bool
 	 */
-	protected function createTypeId($type, $db) {
-		$type_id = $db->nextId("object_data");
-		$db->manipulate("INSERT INTO object_data ".
-			"(obj_id, type, title, description, owner, create_date, last_update) VALUES (".
-			$db->quote($type_id, "integer").",".
-			$db->quote("typ", "text").",".
-			$db->quote($type, "text").",".
-			$db->quote("Plugin ".$this->getPluginName(), "text").",".
-			$db->quote(-1, "integer").",".
-			$db->quote(ilUtil::now(), "timestamp").",".
-			$db->quote(ilUtil::now(), "timestamp").
-			")");
-
-		return $type_id;
-	}
-
-	/**
-	 * Assign permission copy to current plugin
-	 *
-	 * @param int 		$type_id
-	 * @param 			$db
-	 *
-	 * @return int
-	 */
-	protected function assignCopyPermissionToPlugin($type_id, $db) {
-		$ops = array(self::COPY_OPERATION_ID);
-
-		foreach ($ops as $op) {
-			// check whether type exists in object data, if not, create the type
-			
-			if (!$this->permissionIsAssigned($type_id, $op, $db)) {
-				$db->manipulate("INSERT INTO rbac_ta ".
-					"(typ_id, ops_id) VALUES (".
-					$db->quote($type_id, "integer").",".
-					$db->quote($op, "integer").
-					")");
-			}
-		}
-	}
-
-	/**
-	 * Checks permission is not assigned to plugin
-	 *
-	 * @param int 		$type_id
-	 * @param int 		$op_id
-	 * @param 			$db
-	 *
-	 * @return bool
-	 */
-	protected function permissionIsAssigned($type_id, $op_id, $db) {
-		$set = $db->query("SELECT count(typ_id) as cnt FROM rbac_ta ".
-				" WHERE typ_id = ".$db->quote($type_id, "integer").
-				" AND ops_id = ".$db->quote($op_id, "integer"));
+	protected function permissionIsAssigned($type_id, $op_id, $db)
+	{
+		$set = $db->query(
+			"SELECT".PHP_EOL
+			"    count(typ_id) as cnt".PHP_EOL
+			"FROM".PHP_EOL
+			"    rbac_ta".PHP_EOL
+			"WHERE".PHP_EOL
+			"    typ_id = ".$db->quote($type_id, "integer").PHP_EOL
+			"AND".PHP_EOL
+			"    ops_id = ".$db->quote($op_id, "integer").PHP_EOL
+		);
 
 		$rec = $db->fetchAssoc($set);
 
@@ -143,12 +219,11 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin {
 	}
 
 	/**
-	 * decides if this repository plugin can be copied
+	 * Defines custom uninstall action like delete table or something else.
 	 *
-	 * @return bool
+	 * @return 	void
 	 */
-	public function allowCopy()
+	protected function uninstallCustom()
 	{
-		return true;
 	}
 }
