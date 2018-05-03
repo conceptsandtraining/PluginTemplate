@@ -1,14 +1,16 @@
 <?php
 
+use PHPUnit\Framework\TestCase;
+
 /**
  * Sample for PHP Unit tests
  */
-class BogusTest extends PHPUnit_Framework_TestCase {
+class BogusTest extends TestCase {
 
 	public function test_successfull() {
 		$test_var = "Peter";
 
-		$this->assertEqual("Peter", $test_var);
+		$this->assertEquals("Peter", $test_var);
 	}
 
 	public function test_failed() {
