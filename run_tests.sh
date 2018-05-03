@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #plugin path from ilias-root:
-PLUGINPATH='Customizing/global/plugins/Services/Cron/CronHook/PLUGINNAME';
+PLUGINPATH='Customizing/global/plugins/Services/Cron/CronHook/<PLUGINNAME>';
 SCRIPT_PATH=$(dirname "$0");
 cd $SCRIPT_PATH;
 

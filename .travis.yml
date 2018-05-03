@@ -3,5 +3,7 @@ php:
     - 5.6
     - 7.0
 install:
-    composer install
-script: ./run_tests.sh
+    composer update --dev
+script: 
+  - ./vendor/bin/security-checker security:check --end-point=http://security.sensiolabs.org/check_lock
+  - ./run_tests.sh

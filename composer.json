@@ -4,7 +4,11 @@
 			"CaT\\Plugins\\{{PLUGINNAME}}\\" : ["./classes", "./tests"]
 		}
 	},
+	"require-dev": {
+		"roave/security-advisories": "dev-master",
+		"sensiolabs/security-checker": "^4.1"
+	},
 	"config" : {
-		"autoloader-suffix" : "{PLUGINNAME}"
+		"autoloader-suffix" : "<PLUGINNAME>"
 	}
 }
