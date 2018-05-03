@@ -155,12 +155,25 @@ class ilObj<PLUGINNAME> extends ilObjectPlugin implements Obj<PLUGINNAME>
 	}
 
 	/**
-	 * Get an array of relevant parent types.
+	 * Get the parent course
 	 *
-	 * @return 	string[]
+	 * @return ilObjCourse | null
 	 */
-	protected function getParentTypes()
+	public function getParentCourse()
 	{
-		return array("crs");
+		global $DIC;
+		$tree = $DIC->repositoryTree();
+		$parents = $tree->getPathFull($this->getRefId());
+		$parent = array_filter($parents, function($p) {
+			if($p["type"] == "crs") {
+				return $p;
+			}
+		});
+		if(count($parent) > 0) {
+			$parent_crs = array_shift($parent);
+			require_once("Services/Object/classes/class.ilObjectFactory.php");
+			return ilObjectFactory::getInstanceByRefId($parent_crs["ref_id"]);
+		}
+		return null;
 	}
 }
