@@ -4,7 +4,12 @@
 			"CaT\\Plugins\\{{PLUGINNAME}}\\" : ["./classes", "./tests"]
 		}
 	},
+	"require-dev" : {
+		"phpunit/phpunit" : "^5.7",
+		"roave/security-advisories": "dev-master",
+		"sensiolabs/security-checker": "^4.1"
+	},
 	"config" : {
-		"autoloader-suffix" : "{PLUGINNAME}"
+		"autoloader-suffix" : "<PLUGINNAME>"
 	}
 }
