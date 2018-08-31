@@ -78,10 +78,10 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin
 			// check whether type exists in object data, if not, create the type
 			if (!$this->permissionIsAssigned($type_id, $op, $db)) {
 				$db->manipulate(
-					"INSERT INTO".PHP_EOL
-					"    rbac_ta".PHP_EOL
-					"    (typ_id, ops_id)".PHP_EOL
-					"VALUES".PHP_EOL
+					"INSERT INTO".PHP_EOL.
+					"    rbac_ta".PHP_EOL.
+					"    (typ_id, ops_id)".PHP_EOL.
+					"VALUES".PHP_EOL.
 					"    (".
 					$db->quote($type_id, "integer").",".
 					$db->quote($op, "integer").
@@ -127,18 +127,18 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin
 	{
 		$type_id = $db->nextId("object_data");
 		$db->manipulate(
-			"INSERT INTO".PHP_EOL
-			"    object_data".PHP_EOL
-			"    (".PHP_EOL
-			"        obj_id,".PHP_EOL
-			"        type,".PHP_EOL
-			"        title,".PHP_EOL
-			"        description,".PHP_EOL
-			"        owner,".PHP_EOL
-			"        create_date,".PHP_EOL
-			"        last_update".PHP_EOL
-			"    )".PHP_EOL
-			"VALUES".PHP_EOL
+			"INSERT INTO".PHP_EOL.
+			"    object_data".PHP_EOL.
+			"    (".PHP_EOL.
+			"        obj_id,".PHP_EOL.
+			"        type,".PHP_EOL.
+			"        title,".PHP_EOL.
+			"        description,".PHP_EOL.
+			"        owner,".PHP_EOL.
+			"        create_date,".PHP_EOL.
+			"        last_update".PHP_EOL.
+			"    )".PHP_EOL.
+			"VALUES".PHP_EOL.
 			"    (".
 			$db->quote($type_id, "integer").",".
 			$db->quote("typ", "text").",".
@@ -174,13 +174,13 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin
 	protected function getTypeId($type, $db)
 	{
 		$set = $db->query(
-			"SELECT".PHP_EOL
-			"    obj_id".PHP_EOL
-			"FROM".PHP_EOL
-			"    object_data".PHP_EOL
-			"WHERE".PHP_EOL
-			"    type = ".$db->quote("typ", "text").PHP_EOL
-			"AND".PHP_EOL
+			"SELECT".PHP_EOL.
+			"    obj_id".PHP_EOL.
+			"FROM".PHP_EOL.
+			"    object_data".PHP_EOL.
+			"WHERE".PHP_EOL.
+			"    type = ".$db->quote("typ", "text").PHP_EOL.
+			"AND".PHP_EOL.
 			"    title = ".$db->quote($type, "text").PHP_EOL
 		);
 
@@ -203,13 +203,13 @@ class il<PLUGINNAME>Plugin extends ilRepositoryObjectPlugin
 	protected function permissionIsAssigned($type_id, $op_id, $db)
 	{
 		$set = $db->query(
-			"SELECT".PHP_EOL
-			"    count(typ_id) as cnt".PHP_EOL
-			"FROM".PHP_EOL
-			"    rbac_ta".PHP_EOL
-			"WHERE".PHP_EOL
-			"    typ_id = ".$db->quote($type_id, "integer").PHP_EOL
-			"AND".PHP_EOL
+			"SELECT".PHP_EOL.
+			"    count(typ_id) as cnt".PHP_EOL.
+			"FROM".PHP_EOL.
+			"    rbac_ta".PHP_EOL.
+			"WHERE".PHP_EOL.
+			"    typ_id = ".$db->quote($type_id, "integer").PHP_EOL.
+			"AND".PHP_EOL.
 			"    ops_id = ".$db->quote($op_id, "integer").PHP_EOL
 		);
 
